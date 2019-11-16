@@ -76,6 +76,38 @@ if (userInput === "spotify-this-song") {
         })
 }
 
+if (userInput === "concert-this") {
+    axios
+        .get("https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp")
+        .then(function (response) {
+            if (response.data.length === 0) {
+                console.log("Sorry I was unable to find any results for this artist or band.");
+            }
+            else {
+                let eventNumber = 1;
+                for (var i = 0; i < response.data.length; i++) {
+                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                    console.log(" ");
+                    console.log(" ");
+                    console.log("Event Number: " + eventNumber);
+                    console.log("----------------");
+                    console.log(" ");
+                    console.log("Name of the venue is: " + response.data[i].venue.name);
+                    console.log("The venue is located in: " + response.data[i].venue.city);
+                    console.log("Date of the Event is: " + moment(response.data[i].datetime).format('MMMM Do YYYY, h:mm:ss a'));
+                    console.log(" ");
+                    console.log(" ");
+                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                    console.log("\n")
+                    eventNumber++;
+                }
+            }
+        })
+        // Should any error occur, it will be logged to the terminal
+        .catch(function (error) {
+            console.log(error);
+        });
+}
 
 
 
