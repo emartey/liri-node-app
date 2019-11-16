@@ -82,8 +82,7 @@ if (userInput === "concert-this") {
         .then(function (response) {
             if (response.data.length === 0) {
                 console.log("Sorry I was unable to find any results for this artist or band.");
-            }
-            else {
+            } else {
                 let eventNumber = 1;
                 for (var i = 0; i < response.data.length; i++) {
                     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -108,6 +107,87 @@ if (userInput === "concert-this") {
             console.log(error);
         });
 }
+
+if (userInput === "movie-this") {
+    if (searchTerm === "") {
+        searchTerm = "Mr. Nobody";
+        axios
+            .get("http://www.omdbapi.com/?t=" + searchTerm + "&apikey=trilogy")
+            .then(function (response) {
+                if (response.data.length === 0) {
+                    console.log("Sorry I was unable to find any results for this movie.");
+                } else {
+                    console.log(" ");
+                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                    console.log(" ");
+                    console.log(" ");
+                    console.log("Movie information");
+                    console.log("-----------------");
+                    console.log(" ");
+                    console.log(" ");
+                    console.log(response.data.Title);
+                    console.log(" ");
+                    console.log("Year released: " + response.data.Year);
+                    console.log(" ");
+                    console.log("IMDB rating: " + response.data.imdbRating);
+                    // console.log(" ");
+                    console.log(response.data.Ratings[1].Source + " gave this movie a " + response.data.Ratings[1].Value + " rating.");
+                    // console.log(" ");
+                    console.log("Country Produced: " + response.data.Country);
+                    // console.log(" ");
+                    console.log("Language/s: " + response.data.Language);
+                    console.log(" ");
+                    console.log("Plot: " + response.data.Plot);
+                    console.log(" ");
+                    console.log("Main Actors/Actresses: " + response.data.Actors);
+                    console.log(" ");
+                    console.log(" ");
+                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                }
+
+            })
+
+    }
+} if (userInput === "movie-this") {
+    axios
+        .get("http://www.omdbapi.com/?t=" + searchTerm + "&apikey=trilogy")
+        .then(function (response) {
+            if (response.data.length === 0) {
+                console.log("Sorry I was unable to find any results for this movie.");
+            } else {
+                console.log(" ");
+                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                console.log(" ");
+                console.log(" ");
+                console.log("Movie information");
+                console.log("-----------------");
+                console.log(" ");
+                console.log(" ");
+                console.log(response.data.Title);
+                console.log(" ");
+                console.log("Year released: " + response.data.Year);
+                console.log(" ");
+                console.log("IMDB rating: " + response.data.imdbRating);
+                // console.log(" ");
+                console.log(response.data.Ratings[1].Source + " gave this movie a " + response.data.Ratings[1].Value + " rating.");
+                // console.log(" ");
+                console.log("Country Produced: " + response.data.Country);
+                // console.log(" ");
+                console.log("Language/s: " + response.data.Language);
+                console.log(" ");
+                console.log("Plot: " + response.data.Plot);
+                console.log(" ");
+                console.log("Main Actors/Actresses: " + response.data.Actors);
+                console.log(" ");
+                console.log(" ");
+                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            }
+
+        })
+}
+
+
+
 
 
 
