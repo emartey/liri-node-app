@@ -42,7 +42,6 @@ if (userInput === "spotify-this-song") {
                     songCounter++;
                 }
             })
-            // Should any error occur, it will be logged to the terminal
             .catch(function (error) {
                 console.log(error);
             });
@@ -102,7 +101,6 @@ if (userInput === "concert-this") {
                 }
             }
         })
-        // Should any error occur, it will be logged to the terminal
         .catch(function (error) {
             console.log(error);
         });
@@ -130,11 +128,8 @@ if (userInput === "movie-this") {
                     console.log("Year released: " + response.data.Year);
                     console.log(" ");
                     console.log("IMDB rating: " + response.data.imdbRating);
-                    // console.log(" ");
                     console.log(response.data.Ratings[1].Source + " gave this movie a " + response.data.Ratings[1].Value + " rating.");
-                    // console.log(" ");
                     console.log("Country Produced: " + response.data.Country);
-                    // console.log(" ");
                     console.log("Language/s: " + response.data.Language);
                     console.log(" ");
                     console.log("Plot: " + response.data.Plot);
@@ -168,11 +163,8 @@ if (userInput === "movie-this") {
                 console.log("Year released: " + response.data.Year);
                 console.log(" ");
                 console.log("IMDB rating: " + response.data.imdbRating);
-                // console.log(" ");
                 console.log(response.data.Ratings[1].Source + " gave this movie a " + response.data.Ratings[1].Value + " rating.");
-                // console.log(" ");
                 console.log("Country Produced: " + response.data.Country);
-                // console.log(" ");
                 console.log("Language/s: " + response.data.Language);
                 console.log(" ");
                 console.log("Plot: " + response.data.Plot);
@@ -186,8 +178,55 @@ if (userInput === "movie-this") {
         })
 }
 
+if (userInput === "" || userInput !== "concert-this" || userInput !== "spotify-this-song" || userInput !== "movie-this") {
+    console.log("No input detected. Pulling random search...");
+    fs
+        .readFile("random.txt", "utf8", function (error, data) {
+            if (error) {
+                return console.log(error);
+            }
 
+            // Places content of random.txt file inside an array
 
+            var dataArr = data.split(",");
+            let userInput = dataArr[0];
+            let searchTerm = dataArr[1].replace(/\"/g, "")
+
+            if (userInput === "spotify-this-song") {
+                spotify.search({ type: 'track', query: searchTerm })
+                    .then(function (response) {
+                        var songCounter = 1;
+                        for (var i = 0; i < response.tracks.items.length; i++) {
+                            console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                            console.log("-----------------------------------------------");
+                            if (songCounter === 1) {
+                                console.log("TOP RESPONSE");
+                            }
+                            else if (songCounter !== 1) {
+                                console.log("Song Number: " + songCounter);
+
+                            }
+                            console.log("Artist: " + response.tracks.items[i].artists[0].name);
+                            console.log("The song name is: " + response.tracks.items[i].name);
+                            console.log("Here is a song preview from Spotify: " + response.tracks.items[i].preview_url);
+                            console.log("The album containing this song is: " + response.tracks.items[i].album.name);
+                            console.log("-----------------------------------------------");
+                            console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                            console.log("\n");
+                            songCounter++;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+            }
+            else {
+                console.log("Does not compute. Does not compute!");
+            }
+
+        }
+        )
+}
 
 
 
