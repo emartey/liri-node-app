@@ -16,7 +16,7 @@ var spotify = new Spotify(keys.spotify);
 var userInput = process.argv[2];
 // Code to read user query
 var searchTerm = process.argv.slice(3).join("+").toLowerCase();
-console.log(userInput);
+
 if (userInput === "spotify-this-song") {
     if (!searchTerm) {
         searchTerm = "The Sign by Ace of Base";
@@ -25,26 +25,29 @@ if (userInput === "spotify-this-song") {
         .then(function (response) {
             var songCounter = 1;
             for (var i = 0; i < response.tracks.items.length; i++) {
-                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                if (songCounter === 1) {
-                    console.log("TOP RESPONSE");
-                }
-                else if (songCounter !== 1) {
-                    console.log("Song Number: " + songCounter);
 
-                }
-                console.log("-----------------------------------------------");
-                console.log("Artist: " + response.tracks.items[i].artists[0].name);
-                console.log("The song name is: " + response.tracks.items[i].name);
-                console.log("Here is a song preview from Spotify: " + response.tracks.items[i].preview_url);
-                console.log("The album containing this song is: " + response.tracks.items[i].album.name);
-                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                console.log("\n")
-                songCounter++;
+                var songData = [
+                    ("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"),
+                    ("-----------------------------------------------"),
+                    ("Song Number: " + songCounter),
+                    ("Artist: " + response.tracks.items[i].artists[0].name),
+                    ("The song name is: " + response.tracks.items[i].name),
+                    ("Here is a song preview from Spotify: " + response.tracks.items[i].preview_url),
+                    ("The album containing this song is: " + response.tracks.items[i].album.name),
+                    ("-----------------------------------------------"),
+                    ("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"),
+                    ("\n")
+
+                ].join("\n\n");
+                fs.appendFile("log.txt", songData, function (err) {
+                    if (err) throw err;
+                });
+                console.log(songData);
+                songCounter++
             }
         })
         .catch(function (error) {
-            console.log(error);
+            (error);
         });
 
 }
@@ -55,30 +58,33 @@ else if (userInput === "concert-this") {
         .get("https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp")
         .then(function (response) {
             if (response.data.length === 0) {
-                console.log("Sorry I was unable to find any results for this artist or band.");
+                ("Sorry I was unable to find any results for this artist or band.");
             } else {
-                let eventNumber = 1;
+                var eventNumber = 1;
                 for (var i = 0; i < response.data.length; i++) {
-                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                    console.log(" ");
-                    console.log(" ");
-                    console.log("Event Number: " + eventNumber);
-                    console.log("----------------");
-                    console.log(" ");
-                    console.log("Name of the venue is: " + response.data[i].venue.name);
-                    console.log("The venue is located in: " + response.data[i].venue.city);
-                    console.log("Date of the Event is: " + moment(response.data[i].datetime).format('MMMM Do YYYY, h:mm:ss a'));
-                    console.log(" ");
-                    console.log(" ");
-                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                    console.log("\n")
-                    eventNumber++;
+                    var eventData = [
+
+                        ("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"),
+                        ("Event Number: " + eventNumber),
+                        ("----------------"),
+                        ("Name of the venue is: " + response.data[i].venue.name),
+                        ("The venue is located in: " + response.data[i].venue.city),
+                        ("Date of the Event is: " + moment(response.data[i].datetime).format('MMMM Do YYYY, h:mm:ss a')),
+                        ("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"),
+                        ("\n")
+
+
+                    ].join("\n\n");
+                    fs.appendFile("log.txt", eventData, function (err) {
+                        if (err) throw err;
+                    });
+                    console.log(eventData);
+                    eventNumber++
                 }
+
             }
         })
-        .catch(function (error) {
-            console.log(error);
-        });
+
 }
 
 else if (userInput === "movie-this") {
@@ -89,45 +95,38 @@ else if (userInput === "movie-this") {
         .get("http://www.omdbapi.com/?t=" + searchTerm + "&apikey=trilogy")
         .then(function (response) {
             if (response.data.length === 0) {
-                console.log("Sorry I was unable to find any results for this movie.");
+                ("Sorry I was unable to find any results for this movie.");
             } else {
-                console.log(" ");
-                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                console.log(" ");
-                console.log(" ");
-                console.log("Movie information");
-                console.log("-----------------");
-                console.log(" ");
-                console.log(" ");
-                console.log(response.data.Title);
-                console.log(" ");
-                console.log("Year released: " + response.data.Year);
-                console.log(" ");
-                console.log("IMDB rating: " + response.data.imdbRating);
-                console.log(response.data.Ratings[1].Source + " gave this movie a " + response.data.Ratings[1].Value + " rating.");
-                console.log("Country Produced: " + response.data.Country);
-                console.log("Language/s: " + response.data.Language);
-                console.log(" ");
-                console.log("Plot: " + response.data.Plot);
-                console.log(" ");
-                console.log("Main Actors/Actresses: " + response.data.Actors);
-                console.log(" ");
-                console.log(" ");
-                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                var movieData = [
+                    ("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"),
+                    ("Movie information"),
+                    ("-----------------"),
+                    (response.data.Title),
+                    ("Year released: " + response.data.Year),
+                    ("IMDB rating: " + response.data.imdbRating),
+                    (response.data.Ratings[1].Source + " gave this movie a " + response.data.Ratings[1].Value + " rating."),
+                    ("Country Produced: " + response.data.Country),
+                    ("Language/s: " + response.data.Language),
+                    ("Plot: " + response.data.Plot),
+                    ("Main Actors/Actresses: " + response.data.Actors),
+                    ("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"),
+                ].join("\n\n");
+                fs.appendFile("log.txt", movieData, function (err) {
+                    if (err) throw err;
+                    console.log(movieData);
+                });
             }
 
         })
 
-
 }
 
 else {
-    console.log(userInput);
-    console.log("No input detected. Pulling random search...");
+    ("No input detected. Pulling random search...");
     fs
         .readFile("random.txt", "utf8", function (error, data) {
             if (error) {
-                return console.log(error);
+                return (error);
             }
 
             // Places content of random.txt file inside an array
@@ -141,31 +140,32 @@ else {
                     .then(function (response) {
                         var songCounter = 1;
                         for (var i = 0; i < response.tracks.items.length; i++) {
-                            console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                            console.log("-----------------------------------------------");
-                            if (songCounter === 1) {
-                                console.log("TOP RESPONSE");
-                            }
-                            else if (songCounter !== 1) {
-                                console.log("Song Number: " + songCounter);
+                            var songData = [
+                                ("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"),
+                                ("-----------------------------------------------"),
+                                ("Song Number: " + songCounter),
+                                ("Artist: " + response.tracks.items[i].artists[0].name),
+                                ("The song name is: " + response.tracks.items[i].name),
+                                ("Here is a song preview from Spotify: " + response.tracks.items[i].preview_url),
+                                ("The album containing this song is: " + response.tracks.items[i].album.name),
+                                ("-----------------------------------------------"),
+                                ("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"),
+                                ("\n"),
 
-                            }
-                            console.log("Artist: " + response.tracks.items[i].artists[0].name);
-                            console.log("The song name is: " + response.tracks.items[i].name);
-                            console.log("Here is a song preview from Spotify: " + response.tracks.items[i].preview_url);
-                            console.log("The album containing this song is: " + response.tracks.items[i].album.name);
-                            console.log("-----------------------------------------------");
-                            console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                            console.log("\n");
-                            songCounter++;
+                            ].join("\n\n");
+                            fs.appendFile("log.txt", songData, function (err) {
+                                if (err) throw err;
+                            });
+                            console.log(songData);
+                            songCounter++
                         }
                     })
                     .catch(function (err) {
-                        console.log(err);
+                        (err);
                     })
             }
             else {
-                console.log("Does not compute. Does not compute!");
+                ("Does not compute. Does not compute!");
             }
 
         }
