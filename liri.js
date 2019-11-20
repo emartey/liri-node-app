@@ -16,43 +16,16 @@ var spotify = new Spotify(keys.spotify);
 var userInput = process.argv[2];
 // Code to read user query
 var searchTerm = process.argv.slice(3).join("+").toLowerCase();
-
+console.log(userInput);
 if (userInput === "spotify-this-song") {
-    if (searchTerm === "") {
+    if (!searchTerm) {
         searchTerm = "The Sign by Ace of Base";
-        spotify.search({ type: 'track', query: searchTerm })
-            .then(function (response) {
-                var songCounter = 1;
-                for (var i = 0; i < response.tracks.items.length; i++) {
-                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                    if (songCounter === 1) {
-                        console.log("TOP RESPONSE");
-                    }
-                    else if (songCounter !== 1) {
-                        console.log("Song Number: " + songCounter);
-
-                    }
-                    console.log("-----------------------------------------------");
-                    console.log("Artist: " + response.tracks.items[i].artists[0].name);
-                    console.log("The song name is: " + response.tracks.items[i].name);
-                    console.log("Here is a song preview from Spotify: " + response.tracks.items[i].preview_url);
-                    console.log("The album containing this song is: " + response.tracks.items[i].album.name);
-                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                    console.log("\n")
-                    songCounter++;
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
     }
-} else if (userInput === "spotify-this-song") {
     spotify.search({ type: 'track', query: searchTerm })
         .then(function (response) {
             var songCounter = 1;
             for (var i = 0; i < response.tracks.items.length; i++) {
                 console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                console.log("-----------------------------------------------");
                 if (songCounter === 1) {
                     console.log("TOP RESPONSE");
                 }
@@ -60,22 +33,24 @@ if (userInput === "spotify-this-song") {
                     console.log("Song Number: " + songCounter);
 
                 }
+                console.log("-----------------------------------------------");
                 console.log("Artist: " + response.tracks.items[i].artists[0].name);
                 console.log("The song name is: " + response.tracks.items[i].name);
                 console.log("Here is a song preview from Spotify: " + response.tracks.items[i].preview_url);
                 console.log("The album containing this song is: " + response.tracks.items[i].album.name);
-                console.log("-----------------------------------------------");
                 console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                console.log("\n");
+                console.log("\n")
                 songCounter++;
             }
         })
-        .catch(function (err) {
-            console.log(err);
-        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
 }
 
-if (userInput === "concert-this") {
+
+else if (userInput === "concert-this") {
     axios
         .get("https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp")
         .then(function (response) {
@@ -106,44 +81,10 @@ if (userInput === "concert-this") {
         });
 }
 
-if (userInput === "movie-this") {
+else if (userInput === "movie-this") {
     if (searchTerm === "") {
-        searchTerm = "Mr. Nobody";
-        axios
-            .get("http://www.omdbapi.com/?t=" + searchTerm + "&apikey=trilogy")
-            .then(function (response) {
-                if (response.data.length === 0) {
-                    console.log("Sorry I was unable to find any results for this movie.");
-                } else {
-                    console.log(" ");
-                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                    console.log(" ");
-                    console.log(" ");
-                    console.log("Movie information");
-                    console.log("-----------------");
-                    console.log(" ");
-                    console.log(" ");
-                    console.log(response.data.Title);
-                    console.log(" ");
-                    console.log("Year released: " + response.data.Year);
-                    console.log(" ");
-                    console.log("IMDB rating: " + response.data.imdbRating);
-                    console.log(response.data.Ratings[1].Source + " gave this movie a " + response.data.Ratings[1].Value + " rating.");
-                    console.log("Country Produced: " + response.data.Country);
-                    console.log("Language/s: " + response.data.Language);
-                    console.log(" ");
-                    console.log("Plot: " + response.data.Plot);
-                    console.log(" ");
-                    console.log("Main Actors/Actresses: " + response.data.Actors);
-                    console.log(" ");
-                    console.log(" ");
-                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                }
-
-            })
-
+        searchTerm = "Mr. Nobody"
     }
-} if (userInput === "movie-this") {
     axios
         .get("http://www.omdbapi.com/?t=" + searchTerm + "&apikey=trilogy")
         .then(function (response) {
@@ -176,9 +117,12 @@ if (userInput === "movie-this") {
             }
 
         })
+
+
 }
 
-if (userInput === "" || userInput !== "concert-this" || userInput !== "spotify-this-song" || userInput !== "movie-this") {
+else {
+    console.log(userInput);
     console.log("No input detected. Pulling random search...");
     fs
         .readFile("random.txt", "utf8", function (error, data) {
@@ -227,13 +171,3 @@ if (userInput === "" || userInput !== "concert-this" || userInput !== "spotify-t
         }
         )
 }
-
-
-
-
-
-
-
-
-
-
